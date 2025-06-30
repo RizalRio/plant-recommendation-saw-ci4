@@ -327,6 +327,11 @@ return [
             'url'  => 'admin/kriteria', // URL kita isi nanti setelah route dibuat
             'icon' => 'fas fa-fw fa-balance-scale',
         ],
+        [
+            'text' => 'Tanaman',
+            'url'  => 'admin/tanaman',
+            'icon' => 'fas fa-fw fa-leaf',
+        ],
     ],
 
     /*
