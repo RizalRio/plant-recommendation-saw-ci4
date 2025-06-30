@@ -42,8 +42,17 @@
                             <td>{{ $data->bobot }}</td>
                             <td>{{ $data->tipe }}</td>
                             <td>
-                                <a href="#" class="btn btn-xs btn-warning">Edit</a>
-                                <a href="#" class="btn btn-xs btn-danger">Hapus</a>
+                                <form action="{{ route('admin.kriteria.destroy', $data->id) }}" method="POST">
+                                    {{-- Tombol Edit --}}
+                                    <a href="{{ route('admin.kriteria.edit', $data->id) }}" class="btn btn-xs btn-warning">Edit</a>
+                            
+                                    @csrf
+                                    @method('DELETE') {{-- Method spoofing untuk request DELETE --}}
+                            
+                                    {{-- Tombol Hapus dengan konfirmasi JavaScript --}}
+                                    <button type="submit" class="btn btn-xs btn-danger" 
+                                            onclick="return confirm('Anda yakin ingin menghapus data ini?')">Hapus</button>
+                                </form>
                             </td>
                         </tr>
                     @empty

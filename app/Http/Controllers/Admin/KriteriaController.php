@@ -14,7 +14,7 @@ class KriteriaController extends Controller
     public function index()
     {
         // 1. Ambil semua data dari tabel 'kriterias'
-        $kriteria = \App\Models\Kriteria::all();
+        $kriteria = Kriteria::all();
 
         // 2. Tampilkan halaman view dan kirim data $kriteria ke sana
         return view('admin.kriteria.index', compact('kriteria'));
@@ -42,7 +42,7 @@ class KriteriaController extends Controller
 
         // 2. Jika validasi berhasil, simpan data ke database
         // menggunakan metode Mass Assignment yang sudah kita izinkan di Model
-        \App\Models\Kriteria::create($request->all());
+        Kriteria::create($request->all());
 
         // 3. Alihkan (redirect) pengguna kembali ke halaman daftar kriteria
         // sambil mengirimkan pesan sukses
@@ -53,32 +53,47 @@ class KriteriaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Kriteria $kriteria)
-    {
-        //
-    }
+    public function show(Kriteria $kriteria) {}
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Kriteria $kriteria)
+    // FUNGSI EDIT YANG BARU (BENAR)
+    public function edit(Kriteria $kriterium)
     {
-        //
+        // Kirim ke view dengan nama 'kriteria' agar view lama tetap berfungsi
+        return view('admin.kriteria.edit', ['kriteria' => $kriterium]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Kriteria $kriteria)
+    // FUNGSI UPDATE YANG BARU (BENAR)
+    public function update(Request $request, Kriteria $kriterium)
     {
-        //
+        // 1. Validasi data yang masuk dari form
+        $request->validate([
+            // Rule 'unique' diubah agar mengabaikan data yang sedang diedit
+            'nama_kriteria' => 'required|string|max:255|unique:kriteria,nama_kriteria,' . $kriterium->id,
+            'bobot' => 'required|numeric|min:0|max:1',
+            'tipe' => 'required|in:benefit,cost',
+        ]);
+
+        // 2. Jika validasi berhasil, update data di database
+        $kriterium->update($request->all());
+
+        // 3. Redirect ke halaman index kriteria dengan pesan sukses
+        return redirect()->route('admin.kriteria.index')
+            ->with('success', 'Data kriteria berhasil diperbarui.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Kriteria $kriteria)
+    public function destroy(Kriteria $kriterium)
     {
-        //
+        // Hapus data dari database berdasarkan model yang sudah ditemukan otomatis
+        $kriterium->delete();
+
+        // Redirect kembali ke halaman index dengan pesan sukses
+        return redirect()->route('admin.kriteria.index')
+            ->with('success', 'Data kriteria berhasil dihapus.');
     }
 }
