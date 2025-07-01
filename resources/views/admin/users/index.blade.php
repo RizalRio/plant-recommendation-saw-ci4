@@ -7,9 +7,20 @@
 @stop
 
 @section('content')
+    {{-- ... di bawah @section('content') ... --}}
     @if (session('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ session('success') }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    @endif
+
+    {{-- TAMBAHKAN BLOK INI --}}
+    @if (session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ session('error') }}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -41,8 +52,8 @@
                             <td>{{ $user->username }}</td>
                             <td>{{ $user->peran }}</td>
                             <td>
-                                <form action="#" method="POST">
-                                    <a href="#" class="btn btn-xs btn-warning">Edit</a>
+                                <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST">
+                                    <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-xs btn-warning">Edit</a>
                                     @csrf
                                     @method('DELETE')
 

@@ -66,7 +66,10 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        // Route Model Binding bekerja sempurna di sini karena
+        // parameter rute {user} cocok dengan variabel $user.
+        // Kita langsung kirim data user yang ditemukan ke view.
+        return view('admin.users.edit', ['user' => $user]);
     }
 
     /**
@@ -74,7 +77,42 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        // 1. Aturan Validasi
+        $rules = [
+            'nama' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
+            'peran' => 'string|in:Admin,Petani', // Tidak 'required' karena bisa di-disable
+        ];
+
+        // Jika password diisi, tambahkan aturan validasi untuk password
+        if ($request->filled('password')) {
+            $rules['password'] = 'required|string|confirmed|min:8';
+        }
+
+        $request->validate($rules);
+
+        // 2. Siapkan data untuk diupdate
+        $dataToUpdate = [
+            'nama' => $request->nama,
+            'username' => $request->username,
+        ];
+
+        // 3. Cek jika admin mengubah peran (dan itu bukan dirinya sendiri)
+        if ($request->filled('peran') && auth()->user()->id != $user->id) {
+            $dataToUpdate['peran'] = $request->peran;
+        }
+
+        // 4. Cek jika ada password baru yang diinput
+        if ($request->filled('password')) {
+            $dataToUpdate['password'] = \Illuminate\Support\Facades\Hash::make($request->password);
+        }
+
+        // 5. Update data di database
+        $user->update($dataToUpdate);
+
+        // 6. Redirect dengan pesan sukses
+        return redirect()->route('admin.users.index')
+            ->with('success', 'Data pengguna berhasil diperbarui.');
     }
 
     /**
@@ -82,6 +120,18 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        // 1. Lapisan keamanan tambahan di backend
+        // Mencegah admin menghapus akunnya sendiri secara paksa (misal via tool lain)
+        if (auth()->user()->id == $user->id) {
+            return redirect()->route('admin.users.index')
+                ->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
+        }
+
+        // 2. Hapus data dari database
+        $user->delete();
+
+        // 3. Redirect kembali dengan pesan sukses
+        return redirect()->route('admin.users.index')
+            ->with('success', 'Data pengguna berhasil dihapus.');
     }
 }
