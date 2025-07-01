@@ -326,6 +326,13 @@ return [
             'text' => 'Kriteria',
             'url'  => 'admin/kriteria', // URL kita isi nanti setelah route dibuat
             'icon' => 'fas fa-fw fa-balance-scale',
+            'can' => 'admin', // <-- Tambahkan ini untuk membatasi akses
+        ],
+        [
+            'text' => 'Pengguna', // <-- Tambahkan ini
+            'url'  => 'admin/users',
+            'icon' => 'fas fa-fw fa-users',
+            'can' => 'admin', // <-- Tambahkan ini untuk membatasi akses
         ],
     ],
 

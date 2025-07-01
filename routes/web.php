@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\KriteriaController;
+use App\Http\Controllers\Admin\UserController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,6 +29,7 @@ Route::middleware(['auth', 'admin:Admin'])->prefix('admin')->name('admin.')->gro
     // Nanti semua Rute Admin (CRUD Kriteria, Tanaman, dll) kita letakkan di sini
     // contoh: Route::get('kriteria', [KriteriaController::class, 'index'])->name('kriteria.index');
     Route::resource('kriteria', KriteriaController::class);
+    Route::resource('users', UserController::class);
 });
 
 // Rute dashboard bisa diakses semua peran yang sudah login
