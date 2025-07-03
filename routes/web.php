@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\KriteriaController;
 use App\Http\Controllers\Admin\TanamanController;
+use App\Http\Controllers\Admin\UserController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -31,6 +32,7 @@ Route::middleware(['auth', 'admin:Admin'])->prefix('admin')->name('admin.')->gro
     // contoh: Route::get('kriteria', [KriteriaController::class, 'index'])->name('kriteria.index');
     Route::resource('kriteria', KriteriaController::class);
     Route::resource('tanaman', TanamanController::class);
+    Route::resource('users', UserController::class);
 });
 
 // Rute dashboard bisa diakses semua peran yang sudah login
