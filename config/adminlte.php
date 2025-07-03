@@ -338,6 +338,7 @@ return [
             'text' => 'Tanaman',
             'url'  => 'admin/tanaman',
             'icon' => 'fas fa-fw fa-leaf',
+            'can' => 'admin', // <-- Tambahkan ini untuk membatasi akses
         ],
     ],
 
