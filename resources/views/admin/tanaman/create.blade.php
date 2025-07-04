@@ -36,17 +36,23 @@
                 <h5 class="mb-3">Nilai Kriteria</h5>
 
                 {{-- Loop untuk membuat input kriteria secara dinamis --}}
-                @foreach ($kriteria as $item)
-                    <div class="form-group">
-                        <label for="kriteria_{{ $item->id }}">{{ $item->nama_kriteria }}</label>
-
-                        {{-- Nama input dibuat menjadi array: name="kriteria[id_kriteria]" --}}
-                        <input type="text" class="form-control" id="kriteria_{{ $item->id }}"
-                            name="kriteria[{{ $item->id }}]"
-                            placeholder="Masukkan nilai untuk {{ $item->nama_kriteria }}"
-                            value="{{ old('kriteria.' . $item->id) }}" {{-- Mempertahankan nilai lama jika validasi gagal --}} required>
+                @if ($kriteria->isEmpty())
+                    <div class="alert alert-warning">
+                        Tidak ada kriteria yang tersedia. Silakan tambahkan kriteria terlebih dahulu.
                     </div>
-                @endforeach
+                @else
+                    @foreach ($kriteria as $item)
+                        <div class="form-group">
+                            <label for="kriteria_{{ $item->id }}">{{ $item->nama_kriteria }}</label>
+
+                            {{-- Nama input dibuat menjadi array: name="kriteria[id_kriteria]" --}}
+                            <input type="text" class="form-control" id="kriteria_{{ $item->id }}"
+                                name="kriteria[{{ $item->id }}]"
+                                placeholder="Masukkan nilai untuk {{ $item->nama_kriteria }}"
+                                value="{{ old('kriteria.' . $item->id) }}" {{-- Mempertahankan nilai lama jika validasi gagal --}} required>
+                        </div>
+                    @endforeach
+                @endif
 
                 <div class="mt-4">
                     <a href="{{ route('admin.tanaman.index') }}" class="btn btn-secondary">Batal</a>

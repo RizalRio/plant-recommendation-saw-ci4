@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\KriteriaController;
 use App\Http\Controllers\Admin\TanamanController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\PerhitunganController;
+use App\Http\Controllers\RiwayatController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,6 +32,7 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth', 'admin:Admin'])->prefix('admin')->name('admin.')->group(function () {
     // Nanti semua Rute Admin (CRUD Kriteria, Tanaman, dll) kita letakkan di sini
     // contoh: Route::get('kriteria', [KriteriaController::class, 'index'])->name('kriteria.index');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::resource('kriteria', KriteriaController::class);
     Route::resource('tanaman', TanamanController::class);
     Route::resource('users', UserController::class);
@@ -38,4 +41,7 @@ Route::middleware(['auth', 'admin:Admin'])->prefix('admin')->name('admin.')->gro
 // Rute dashboard bisa diakses semua peran yang sudah login
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/perhitungan', [PerhitunganController::class, 'index'])->name('perhitungan.index');
+    Route::post('/perhitungan', [PerhitunganController::class, 'hitung'])->name('perhitungan.hitung');
+    Route::get('/riwayat', [RiwayatController::class, 'index'])->name('riwayat.index');
 });

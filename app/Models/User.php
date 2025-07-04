@@ -45,4 +45,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    // di dalam class User
+    public function dataLingkungan()
+    {
+        return $this->hasMany(\App\Models\DataLingkungan::class, 'id_user');
+    }
 }

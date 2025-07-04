@@ -321,7 +321,20 @@ return [
             'url'  => '/dashboard',
             'icon' => 'fas fa-fw fa-tachometer-alt',
         ],
-        ['header' => 'Manajemen Data'],
+        [
+            'text' => 'Perhitungan SPK',
+            'route'  => 'perhitungan.index',
+            'icon' => 'fas fa-fw fa-calculator',
+        ],
+        [
+            'text' => 'Riwayat Perhitungan', // <-- TAMBAHKAN INI
+            'route'  => 'riwayat.index',
+            'icon' => 'fas fa-fw fa-history',
+        ],
+        [
+            'header' => 'Manajemen Data',
+            'can' => 'admin', // <-- Tambahkan ini untuk membatasi akses
+        ],
         [
             'text' => 'Kriteria',
             'url'  => 'admin/kriteria', // URL kita isi nanti setelah route dibuat

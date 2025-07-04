@@ -40,4 +40,15 @@ class Tanaman extends Model
         $kriteria = $this->kriteria->firstWhere('nama_kriteria', $namaKriteria);
         return $kriteria ? $kriteria->pivot->nilai : 'N/A';
     }
+
+    public function kriteriaTanaman()
+    {
+        // Parameter kedua ('tanaman_id') adalah nama foreign key di tabel kriteria_tanamans
+        return $this->hasMany(KriteriaTanaman::class, 'id_tanaman');
+    }
+
+    public function tanaman()
+    {
+        return $this->belongsTo(\App\Models\Tanaman::class, 'id_tanaman');
+    }
 }
