@@ -39,6 +39,12 @@
                     </div>
                 </div>
             </div>
+            {{-- TAMBAHKAN BAGIAN INI --}}
+            <div class="card-footer text-right">
+                <a href="{{ route('riwayat.show', $item->id) }}" class="btn btn-info btn-sm">
+                    <i class="fas fa-eye"></i> Lihat Detail Perhitungan
+                </a>
+            </div>
         </div>
     @empty
         <div class="card">

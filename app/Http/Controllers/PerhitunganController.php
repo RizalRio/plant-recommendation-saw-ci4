@@ -95,7 +95,16 @@ class PerhitunganController extends Controller
         // ==============================================
 
         // 6. Kirim hasil ke view (Tidak berubah)
-        return view('petani.perhitungan.hasil', compact('hasilAkhir', 'inputPetani'));
+        //return view('petani.perhitungan.hasil', compact('hasilAkhir', 'inputPetani'));
+
+        // Menjadi seperti ini:
+        return view('petani.perhitungan.hasil', compact(
+            'hasilAkhir',
+            'inputPetani',
+            'alternatifs',      // Data semua tanaman
+            'kriterias',        // Data semua kriteria
+            'normalizedMatrix'  // Matriks hasil normalisasi
+        ));
     }
 
     private function calculateNormalization($preferensi, $input, $namaKriteria)

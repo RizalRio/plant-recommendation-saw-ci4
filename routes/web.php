@@ -44,4 +44,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/perhitungan', [PerhitunganController::class, 'index'])->name('perhitungan.index');
     Route::post('/perhitungan', [PerhitunganController::class, 'hitung'])->name('perhitungan.hitung');
     Route::get('/riwayat', [RiwayatController::class, 'index'])->name('riwayat.index');
+    Route::get('/riwayat/{id}', [RiwayatController::class, 'show'])->name('riwayat.show');
 });

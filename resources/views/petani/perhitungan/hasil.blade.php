@@ -7,9 +7,10 @@
 @stop
 
 @section('content')
+
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Peringkat Tanaman Terbaik untuk Kondisi Lahan Anda</h3>
+            <h3 class="card-title">Data Kondisi Lahan (Input Pengguna)</h3>
         </div>
         <div class="card-body">
             <p>Berdasarkan data input yang Anda berikan:</p>
@@ -20,8 +21,134 @@
                 <li><strong>Ketersediaan Air:</strong> {{ $inputPetani['ketersediaan_air'] }}</li>
                 <li><strong>Kelembaban:</strong> {{ $inputPetani['kelembaban'] }} %</li>
             </ul>
-            <hr>
-            <h4>Hasil Peringkat:</h4>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Tabel Alternatif</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-sm">
+                        <thead>
+                            <tr>
+                                <th>Kode</th>
+                                <th>Nama Tanaman</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($alternatifs as $alternatif)
+                                <tr>
+                                    <td>A{{ $loop->iteration }}</td>
+                                    <td>{{ $alternatif->nama_tanaman }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Tabel Bobot Kriteria</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-sm">
+                        <thead>
+                            <tr>
+                                <th>Kode</th>
+                                <th>Nama Kriteria</th>
+                                <th>Bobot</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($kriterias as $kriteria)
+                                <tr>
+                                    <td>C{{ $loop->iteration }}</td>
+                                    <td>{{ $kriteria->nama_kriteria }}</td>
+                                    <td>{{ $kriteria->bobot }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Matriks Keputusan (Nilai Kecocokan Kriteria)</h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-sm text-center">
+                <thead>
+                    <tr>
+                        <th>Alternatif</th>
+                        @foreach ($kriterias as $kriteria)
+                            <th>C{{ $loop->iteration }}</th>
+                        @endforeach
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($alternatifs as $alternatif)
+                        <tr>
+                            <td><b>{{ $alternatif->nama_tanaman }}</b></td>
+                            @foreach ($kriterias as $kriteria)
+                                <td>
+                                    @php
+                                        // Cari nilai preferensi yang sesuai
+                                        $nilaiPreferensi = $alternatif->kriteriaTanaman->firstWhere('id_kriteria', $kriteria->id);
+                                    @endphp
+                                    {{ $nilaiPreferensi->nilai ?? '-' }}
+                                </td>
+                            @endforeach
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Matriks Ternormalisasi (R)</h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-sm text-center">
+                <thead>
+                    <tr>
+                        <th>Alternatif</th>
+                        @foreach ($kriterias as $kriteria)
+                            <th>C{{ $loop->iteration }}</th>
+                        @endforeach
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($alternatifs as $alternatif)
+                        <tr>
+                            <td><b>{{ $alternatif->nama_tanaman }}</b></td>
+                            @foreach ($kriterias as $kriteria)
+                                <td>
+                                    {{ round($normalizedMatrix[$alternatif->id][$kriteria->id], 4) }}
+                                </td>
+                            @endforeach
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Hasil Akhir Perankingan</h3>
+        </div>
+        <div class="card-body">
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
@@ -36,9 +163,9 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $hasil['nama_tanaman'] }}</td>
-                            <td>{{ $hasil['skor'] }}</td>
+                            <td><b>{{ $hasil['skor'] }}</b></td>
                             <td>
-                                @if($loop->first)
+                                @if ($loop->first)
                                     <span class="badge bg-success">Sangat Direkomendasikan</span>
                                 @else
                                     <span class="badge bg-info">Alternatif</span>
