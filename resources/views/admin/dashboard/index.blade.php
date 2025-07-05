@@ -84,38 +84,74 @@
 @section('js')
     <script>
         $(function() {
-            'use strict'
+            'use strict';
+
+            // 1. Definisikan palet warna yang akan digunakan untuk bar dan border
+            const colorPalette = [
+                'rgba(255, 99, 132, 0.5)',  // Merah
+                'rgba(54, 162, 235, 0.5)', // Biru
+                'rgba(255, 206, 86, 0.5)',  // Kuning
+                'rgba(75, 192, 192, 0.5)',  // Hijau
+                'rgba(153, 102, 255, 0.5)',// Ungu
+                'rgba(255, 159, 64, 0.5)'  // Oranye
+            ];
+
+            const borderPalette = [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ];
+
+            // 2. Ambil data dari controller
+            const chartLabels = @json($chartLabels);
+            const chartData = @json($chartData);
+
+            // 3. Buat array warna untuk setiap bar berdasarkan jumlah label
+            //    Warna akan berulang jika jumlah label lebih banyak dari palet warna
+            const backgroundColors = chartLabels.map((_, index) => colorPalette[index % colorPalette.length]);
+            const borderColors = chartLabels.map((_, index) => borderPalette[index % borderPalette.length]);
+
+            // =================================================================
 
             // Dapatkan context dari canvas
             var ctx = document.getElementById('rekomendasiChart').getContext('2d');
 
-            // Data untuk chart, disesuaikan dengan gambar
+            // Data untuk chart
             var data = {
-                labels: ['Padi', 'Jagung', 'Kedelai'],
+                labels: chartLabels,
                 datasets: [{
-                    backgroundColor: 'rgba(60,141,188,0.5)',
-                    borderColor: 'rgba(60,141,188,0.8)',
-                    data: [6, 7.5, 4] // Perkiraan nilai dari gambar
+                    label: 'Jumlah Rekomendasi',
+                    backgroundColor: backgroundColors, // Gunakan array warna
+                    borderColor: borderColors,     // Gunakan array warna
+                    borderWidth: 1,                // Tambahkan ketebalan border
+                    data: chartData
                 }]
             }
 
+            // Opsi untuk chart
             var options = {
                 maintainAspectRatio: false,
                 responsive: true,
                 legend: {
-                    display: false // Sembunyikan legend
+                    display: false
                 },
                 scales: {
                     xAxes: [{
                         gridLines: {
-                            display: false, // Sembunyikan grid garis vertikal
+                            display: false,
                         }
                     }],
                     yAxes: [{
                         ticks: {
                             beginAtZero: true,
-                            max: 20, // Atur skala maksimal
-                            stepSize: 5 // Atur interval skala
+                            callback: function(value) {
+                                if (value % 1 === 0) {
+                                    return value;
+                                }
+                            }
                         }
                     }]
                 }

@@ -33,7 +33,7 @@
                         <th>Suhu</th>
                         <th>Curah Hujan</th>
                         <th>Ketersediaan Air</th>
-                        <th>Kelembapan</th>
+                        <th>Kelembaban</th>
                         <th style="width: 150px">Aksi</th>
                     </tr>
                 </thead>
@@ -43,10 +43,10 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $data->nama_tanaman }}</td>
                             <td>{{ $data->getKriteriaValue('Jenis Tanah') }}</td>
-                            <td>{{ $data->getKriteriaValue('Suhu (°C)') }}</td>
-                            <td>{{ $data->getKriteriaValue('Curah Hujan (mm)') }}</td>
+                            <td>{{ $data->getKriteriaValue('Suhu') }}</td>
+                            <td>{{ $data->getKriteriaValue('Curah Hujan') }}</td>
                             <td>{{ $data->getKriteriaValue('Ketersediaan Air') }}</td>
-                            <td>{{ $data->getKriteriaValue('Kelembaban (%)') }}</td>
+                            <td>{{ $data->getKriteriaValue('Kelembaban') }}</td>
                             <td>
                                 <form action="{{ route('admin.tanaman.destroy', $data->id) }}" method="POST">
                                     {{-- Tombol Edit --}}
