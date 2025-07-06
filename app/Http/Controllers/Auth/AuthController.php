@@ -70,7 +70,7 @@ class AuthController extends Controller
         Auth::login($user);
 
         // 5. Arahkan ke halaman dashboard
-        return redirect()->route('dashboard');
+        return redirect()->route('dashboard.index');
     }
 
     public function logout(Request $request): RedirectResponse
