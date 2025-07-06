@@ -131,10 +131,17 @@ class TanamanController extends Controller
      */
     public function destroy(Tanaman $tanaman) // Gunakan Route Model Binding
     {
-        // Eloquent secara otomatis akan menghapus data terkait di tabel pivot
+        // 1. Lepaskan semua relasi Many-to-Many dengan kriteria terlebih dahulu.
+        // Ini akan menghapus entri terkait di tabel pivot (kriteria_tanaman).
+        // Ini penting jika foreign key di tabel pivot tidak memiliki ON DELETE CASCADE.
+        $tanaman->kriteria()->detach();
+
+        // 2. Sekarang, hapus data tanaman itu sendiri.
+        // Setelah entri di tabel pivot dihapus, data tanaman (parent) dapat dihapus.
         $tanaman->delete();
 
+        // 3. Redirect kembali dengan pesan sukses.
         return redirect()->route('admin.tanaman.index')
-            ->with('success', 'Data tanaman berhasil dihapus.');
+            ->with('success', 'Data tanaman dan kriteria terkait berhasil dihapus.');
     }
 }
