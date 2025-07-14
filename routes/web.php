@@ -8,10 +8,9 @@ use App\Http\Controllers\Admin\TanamanController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\PerhitunganController;
 use App\Http\Controllers\RiwayatController;
+use App\Http\Controllers\LandingController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [LandingController::class, 'index'])->name('landing');
 
 // Rute untuk menampilkan halaman login
 Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
